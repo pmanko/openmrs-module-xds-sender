@@ -10,6 +10,7 @@ import org.openmrs.module.xdssender.api.service.XdsImportService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.io.OutputStream;
@@ -20,7 +21,12 @@ public class CcdServiceImpl implements CcdService {
 	private static final Logger LOGGER = LoggerFactory.getLogger(CcdServiceImpl.class);
 
 	@Autowired
+	@Qualifier("xdsSender.XdsImportService")
 	private XdsImportService xdsImportService;
+
+	@Autowired
+	@Qualifier("xdsSender.ShrImportService")
+	XdsImportService shrImportService;
 
 	@Autowired
 	private CcdDao ccdDao;
@@ -35,7 +41,12 @@ public class CcdServiceImpl implements CcdService {
 
 	@Override
 	public Ccd downloadAndSaveCcd(Patient patient) throws XDSException {
-		Ccd ccd = xdsImportService.retrieveCCD(patient);
+		Ccd ccd;
+
+		if(config.getShrType() == "fhir")
+			ccd = shrImportService.retrieveCCD(patient);
+		else
+			ccd = xdsImportService.retrieveCCD(patient);
 
 		if (ccd != null) {
 			ccd = ccdDao.saveOrUpdate(ccd);
