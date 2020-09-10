@@ -140,6 +140,11 @@
 		<description>Endpoint used to fetch Notifications from the Pull Point</description>
 	</globalProperty>
 
+	<globalProperty>
+		<property>xdssender.shrType</property>
+		<description>Type of SHR service to use</description>
+	</globalProperty>
+
 	<!-- AOP
 	<advice>
 		<point>org.openmrs.api.FormService</point>
