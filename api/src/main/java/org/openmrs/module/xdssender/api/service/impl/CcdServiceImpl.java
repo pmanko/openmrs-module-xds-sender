@@ -12,6 +12,7 @@ import org.openmrs.module.xdssender.api.domain.Ccd;
 import org.openmrs.module.xdssender.api.domain.dao.CcdDao;
 import org.openmrs.module.xdssender.api.service.CcdService;
 import org.openmrs.module.xdssender.api.service.XdsImportService;
+import org.openmrs.module.xdssender.api.xds.XdsUtil;
 import org.openmrs.util.OpenmrsUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -55,23 +56,15 @@ public class CcdServiceImpl implements CcdService {
 
     @Override
     public String getHtmlParsedLocallyStoredCcd(Patient patient) {
+        XdsUtil xdsUtil = new XdsUtil();
         String ccdString = getLocallyStoredCcd(patient).getDocument();
-
         Bundle resource = (Bundle) fhirContext.newJsonParser().parseResource(ccdString);
-        Bundle.BundleEntryComponent result = resource.getEntryFirstRep();
-        org.hl7.fhir.r4.model.Patient pat = (org.hl7.fhir.r4.model.Patient) result.getResource();
-        HumanName patientNames = pat.getNameFirstRep();
-        Map<String, String> ccdStringMap = new HashMap<>();
-        ccdStringMap.put("familyName", patientNames.getFamily());
-        ccdStringMap.put("givenName", patientNames.getGiven().toString());
-
         File ccdTemplate = new File(OpenmrsUtil.getApplicationDataDirectory(), "ccdTemplate.txt");
         String ccdFormedString = null;
         if (!ccdTemplate.exists()) {
             try {
                 ccdTemplate.createNewFile();
-                GStringTemplateEngine templateEngine = new GStringTemplateEngine();
-                ccdFormedString = templateEngine.createTemplate(ccdTemplate).make(ccdStringMap).toString();
+                ccdFormedString = xdsUtil.parseCcdToHtml(resource,ccdTemplate);
             } catch (IOException e) {
                 e.printStackTrace();
             } catch (ClassNotFoundException e) {
