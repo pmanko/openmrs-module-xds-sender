@@ -18,10 +18,8 @@ public class ShrRetriever {
 	@Autowired
 	private XdsSenderConfig config;
 
-	@Autowired
-	@Qualifier("fhirR4")
-	private FhirContext fhirContext;
-	
+	private FhirContext fhirContext = FhirContext.forR4();
+
 	public Bundle sendRetrieveCCD(String patientEcid)  {
 		try {
 			// TODO use client.
