@@ -12,6 +12,7 @@ import org.openmrs.module.xdssender.api.domain.Ccd;
 import org.openmrs.module.xdssender.api.service.XdsImportService;
 import org.openmrs.module.xdssender.api.xds.ShrRetriever;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 @Component("xdsSender.ShrImportService")
@@ -27,7 +28,9 @@ public class ShrImportServiceImpl implements XdsImportService {
 	@Autowired
 	private ShrRetriever shrRetriever;
 
- 	private static FhirContext fhirContext = FhirContext.forR4();
+	@Autowired
+	@Qualifier("fhirContext")
+ 	private static FhirContext fhirContext;
 
 	@Override
 	public Ccd retrieveCCD(Patient patient) throws XDSException {
@@ -36,7 +39,6 @@ public class ShrImportServiceImpl implements XdsImportService {
 		String patientEcid = extractPatientEcid(patient);
 
 		try {
-			shrRetriever.setFhirContext(fhirContext);
 			Bundle result = shrRetriever.sendRetrieveCCD(patientEcid);
 
 			ccd = new Ccd();

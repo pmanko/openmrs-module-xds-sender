@@ -45,7 +45,7 @@ public class CcdServiceImpl implements CcdService {
     private XdsSenderConfig config;
 
     @Autowired
-    @Qualifier("fhirR4")
+    @Qualifier("fhirContext")
     private FhirContext fhirContext;
 
     @Override
