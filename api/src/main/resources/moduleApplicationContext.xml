@@ -11,8 +11,6 @@
     <context:component-scan base-package="org.openmrs.module.xdssender"/>
 
     <!-- Todo: use fhir2 R4 FhirContext bean -->
-
-
     <bean name="fhirContext" class="ca.uhn.fhir.context.FhirContext" factory-method="forR4"></bean>
 
     <bean parent="serviceContext">

@@ -36,7 +36,7 @@ public class CcdServiceImpl implements CcdService {
 
     @Autowired
     @Qualifier("xdsSender.ShrImportService")
-    XdsImportService shrImportService;
+    private ShrImportServiceImpl shrImportService;
 
     @Autowired
     private CcdDao ccdDao;
@@ -44,9 +44,11 @@ public class CcdServiceImpl implements CcdService {
     @Autowired
     private XdsSenderConfig config;
 
-    @Autowired
-    @Qualifier("fhirContext")
-    private FhirContext fhirContext;
+    // Todo: Fix Autowiring
+
+    // @Autowired
+    // @Qualifier("fhirContext")
+    private FhirContext fhirContext = FhirContext.forR4();
 
     @Override
     public Ccd getLocallyStoredCcd(Patient patient) {
@@ -77,10 +79,12 @@ public class CcdServiceImpl implements CcdService {
     public Ccd downloadAndSaveCcd(Patient patient) throws XDSException {
         Ccd ccd;
 
-        if (config.getShrType() == "fhir")
+        if (config.getShrType() == "fhir") {
+            shrImportService.setFhirContext(fhirContext);
             ccd = shrImportService.retrieveCCD(patient);
-        else
+        } else {
             ccd = xdsImportService.retrieveCCD(patient);
+        }
 
         if (ccd != null) {
             ccd = ccdDao.saveOrUpdate(ccd);

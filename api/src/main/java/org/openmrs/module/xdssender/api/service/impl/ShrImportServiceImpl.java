@@ -28,9 +28,14 @@ public class ShrImportServiceImpl implements XdsImportService {
 	@Autowired
 	private ShrRetriever shrRetriever;
 
-	@Autowired
-	@Qualifier("fhirContext")
+	// Todo: fix autowiring
+	// @Autowired
+	// @Qualifier("fhirContext")
  	private FhirContext fhirContext;
+
+	public void setFhirContext(FhirContext fhirContext) {
+		this.fhirContext = fhirContext;
+	}
 
 	@Override
 	public Ccd retrieveCCD(Patient patient) throws XDSException {
@@ -39,6 +44,7 @@ public class ShrImportServiceImpl implements XdsImportService {
 		String patientEcid = extractPatientEcid(patient);
 
 		try {
+			shrRetriever.setFhirContext(fhirContext);
 			Bundle result = shrRetriever.sendRetrieveCCD(patientEcid);
 
 			ccd = new Ccd();
