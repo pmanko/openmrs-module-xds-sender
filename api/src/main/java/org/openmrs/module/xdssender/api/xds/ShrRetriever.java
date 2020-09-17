@@ -20,7 +20,7 @@ public class ShrRetriever {
 
 	@Autowired
 	@Qualifier("fhirContext")
-	private static FhirContext fhirContext;
+	private FhirContext fhirContext;
 
 	public Bundle sendRetrieveCCD(String patientEcid)  {
 		try {

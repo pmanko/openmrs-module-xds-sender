@@ -30,7 +30,7 @@ public class ShrImportServiceImpl implements XdsImportService {
 
 	@Autowired
 	@Qualifier("fhirContext")
- 	private static FhirContext fhirContext;
+ 	private FhirContext fhirContext;
 
 	@Override
 	public Ccd retrieveCCD(Patient patient) throws XDSException {
