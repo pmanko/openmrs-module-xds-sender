@@ -38,7 +38,9 @@ public class ShrImportServiceImpl implements XdsImportService {
 	@Autowired
 	private ShrRetriever shrRetriever;
 
-    private FhirContext fhirContext = FhirContext.forR4();
+	@Autowired
+	@Qualifier("fhirR4")
+	private FhirContext fhirContext;
 
 	@Override
 	public Ccd retrieveCCD(Patient patient) throws XDSException {

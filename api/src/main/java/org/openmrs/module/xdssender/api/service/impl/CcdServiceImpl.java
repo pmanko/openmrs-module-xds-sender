@@ -44,6 +44,10 @@ public class CcdServiceImpl implements CcdService {
     @Autowired
     private XdsSenderConfig config;
 
+    @Autowired
+    @Qualifier("fhirR4")
+    private FhirContext fhirContext;
+
     @Override
     public Ccd getLocallyStoredCcd(Patient patient) {
         return ccdDao.find(patient);
@@ -51,7 +55,6 @@ public class CcdServiceImpl implements CcdService {
 
     @Override
     public String getHtmlParsedLocallyStoredCcd(Patient patient) {
-        FhirContext fhirContext = FhirContext.forR4();
         String ccdString = getLocallyStoredCcd(patient).getDocument();
 
         Bundle resource = (Bundle) fhirContext.newJsonParser().parseResource(ccdString);
