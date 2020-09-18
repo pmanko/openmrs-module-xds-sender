@@ -31,10 +31,6 @@ public class CcdServiceImpl implements CcdService {
     private static final Logger LOGGER = LoggerFactory.getLogger(CcdServiceImpl.class);
 
     @Autowired
-    @Qualifier("xdsSender.XdsImportService")
-    private XdsImportService xdsImportService;
-
-    @Autowired
     @Qualifier("xdsSender.ShrImportService")
     private ShrImportServiceImpl shrImportService;
 
@@ -79,12 +75,8 @@ public class CcdServiceImpl implements CcdService {
     public Ccd downloadAndSaveCcd(Patient patient) throws XDSException {
         Ccd ccd;
 
-        if (config.getShrType() == "fhir") {
-            shrImportService.setFhirContext(fhirContext);
-            ccd = shrImportService.retrieveCCD(patient);
-        } else {
-            ccd = xdsImportService.retrieveCCD(patient);
-        }
+        shrImportService.setFhirContext(fhirContext);
+        ccd = shrImportService.retrieveCCD(patient);
 
         if (ccd != null) {
             ccd = ccdDao.saveOrUpdate(ccd);
