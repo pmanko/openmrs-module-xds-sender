@@ -214,14 +214,6 @@
 						<artifactId>servlet-api</artifactId>
 						<groupId>javax.servlet</groupId>
 					</exclusion>
-					<exclusion>
-						<artifactId>org.apache.httpcomponents</artifactId>
-						<groupId>httpcore</groupId>
-					</exclusion>
-					<exclusion>
-						<artifactId>org.apache.httpcomponents</artifactId>
-						<groupId>httpclient</groupId>
-					</exclusion>
 				</exclusions>
 			</dependency>
 			<dependency>
