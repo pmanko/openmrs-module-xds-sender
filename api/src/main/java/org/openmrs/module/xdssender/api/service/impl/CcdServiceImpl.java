@@ -79,7 +79,7 @@ public class CcdServiceImpl implements CcdService {
     public Ccd downloadAndSaveCcd(Patient patient) throws XDSException {
         Ccd ccd;
 
-        if (config.getShrType() == "fhir") {
+        if (true) {
             shrImportService.setFhirContext(fhirContext);
             ccd = shrImportService.retrieveCCD(patient);
         } else {
