@@ -37,8 +37,21 @@ public class ShrRetriever {
 
 	public Bundle sendRetrieveCCD(Patient patient) {
 		try {
+			// Create the identifier that's appended to patients sent to OpenCR
 			String mpiIdentifier = config.getLocalPatientIdRoot() + patient.getUuid();
 
+			// Send request to get an IPS bundle from SHR
+			IGenericClient shrClient = fhirContext.getRestfulClientFactory().newGenericClient(config.getExportCcdEndpoint());
+
+			Bundle returnBundle =  shrClient
+					.search()
+					.byUrl("IPS/" + mpiIdentifier)
+					.returnBundle(Bundle.class)
+					.execute();
+			/**
+			 * MOVE:
+			 */
+			/*
 			IGenericClient mpiClient = fhirContext.getRestfulClientFactory().newGenericClient(config.getMpiEndpoint());
 			// By default, just get this instance's patient
 			String patientIds = patient.getUuid();
@@ -118,17 +131,9 @@ public class ShrRetriever {
 			} catch (Exception e) {
 				LOGGER.error("Failed to get linked Patients from MPI: ", e);
 				patientIds = patient.getUuid();
-			}
+			}*/
 
 			// Get SHR Bundle for collected patient ids
-			IGenericClient shrClient = fhirContext.getRestfulClientFactory().newGenericClient(config.getExportCcdEndpoint());
-
-			Bundle returnBundle =  shrClient.search().byUrl("/Patient?_id=" + patientIds + "&_revinclude=*").returnBundle(Bundle.class)
-					.execute();
-
-			if(!returnBundle.hasTotal() || returnBundle.getTotal() == 0)
-				returnBundle = shrClient.search().byUrl("/Patient?_id=" + patient.getUuid() + "&_revinclude=*").returnBundle(Bundle.class)
-						.execute();
 
 			return returnBundle;
 		}

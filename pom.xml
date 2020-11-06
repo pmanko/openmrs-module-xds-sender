@@ -32,7 +32,7 @@
 		<everestVersion>1.1.0</everestVersion>
 		<dcm4chee-xds2Version>2.0.4</dcm4chee-xds2Version>
 		<javax.servletVersion>3.1.0</javax.servletVersion>
-		<eventVersion>2.5</eventVersion>
+		<eventVersion>2.8.0</eventVersion>
 		<legacyuiVersion>1.2.3</legacyuiVersion>
 		<apacheHttpCoreVersion>4.2</apacheHttpCoreVersion>
 		<apacheHttpClientVersion>4.2</apacheHttpClientVersion>
