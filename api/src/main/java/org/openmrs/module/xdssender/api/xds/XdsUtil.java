@@ -371,11 +371,6 @@ public final class XdsUtil {
         putValue(ccdStringMap,"birthDate", birthDate.toString());
         putValue(ccdStringMap,"gender", gender);
         putValue(ccdStringMap,"address", addressFirstRep);
-
-
-
-
-
         putValue(ccdStringMap,"patientId", patientId.getValue());
         putValue(ccdStringMap,"maritalStatus", maritalStatus.getText());
         putValue(ccdStringMap,"telephone", telephone.getValue());
@@ -390,14 +385,22 @@ public final class XdsUtil {
 
     private static void putValue(Map<String, Object> ccdStringMap, String key, Object value) {
         try {
-            if(value != null &&
-                    (!ccdStringMap.containsKey(key)
-                            || ccdStringMap.get(key) == null
-                            || ((String) ccdStringMap.get(key)).isEmpty())) {
-                ccdStringMap.put(key, value);
+
+            if(ccdStringMap.containsKey(key)) { // Update
+                if(ccdStringMap.get(key) == null || ((String) ccdStringMap.get(key)).isEmpty()){
+                    ccdStringMap.put(key, value);
+                }
+            } else { // Create
+                if(value != null) {
+                    ccdStringMap.put(key, value);
+                } else {
+                    ccdStringMap.put(key, "");
+                }
             }
         } catch (Exception e) {
-            return;
+            if(!ccdStringMap.containsKey(key)) {
+                ccdStringMap.put(key, "");
+            }
         }
     }
 
